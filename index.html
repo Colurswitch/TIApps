@@ -1,19 +1,22 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <!-- Material Design Lite. -->
         <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.teal-red.min.css" />
-        <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+        <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+        
+        <!-- ticalc-usb (required for sending files) -->
+        <script defer src="https://unpkg.com/ticalc-usb@1.1.2/dist/index.js"></script>
+
+        <!-- Internal styling -->
         <style>
             body {
                 font-family: "Roboto";
             }
 
-            #pnlNoFolder {
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
+            #pnlNoFolder > p {
+                text-align: center;
             }
         </style>
     </head>
@@ -24,6 +27,7 @@
             <div class="mdl-layout__header-row">
                 <!-- Title -->
                 <span class="mdl-layout-title">TIApps</span>
+                <div class="mdl-layout-spacer"></div>
             </div>
             <!-- Tabs -->
             <div class="mdl-layout__tab-bar mdl-js-ripple-effect">
