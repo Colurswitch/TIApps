@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <title>TIApps</title>
+        <!-- Favicon -->
+
+        
         <!-- Material Design Lite. -->
         <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.teal-red.min.css" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
@@ -13,6 +17,11 @@
         <style>
             body {
                 font-family: "Roboto";
+            }
+
+            #pnlNoFolder {
+                display: flex;
+                align-items: center;
             }
 
             #pnlNoFolder > p {
@@ -28,6 +37,10 @@
                 <!-- Title -->
                 <span class="mdl-layout-title">TIApps</span>
                 <div class="mdl-layout-spacer"></div>
+                <nav class="mdl-navigation">
+                    <a href="javascript:selectDevice();" class="mdl-navigation__link">Select Device</a>
+                    <a href="#" class="mdl-navigation__link"><span class="material-icons">devices</span><div id="lblConnectedDevice">None</div></a>
+                </nav>
             </div>
             <!-- Tabs -->
             <div class="mdl-layout__tab-bar mdl-js-ripple-effect">
