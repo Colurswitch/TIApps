@@ -1,0 +1,11 @@
+{
+  "name": "tiapps",
+  "version": "1.0.0",
+  "description": "A web app that allows sending files to your calculator",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Testing.\""
+  },
+  "author": "ColurMine",
+  "license": "ISC"
+}
