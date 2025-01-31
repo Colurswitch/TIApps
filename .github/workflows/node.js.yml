@@ -20,8 +20,8 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-    - run: npm i
     - run: npm init
+    - run: npm i
     - run: npm ci
     - uses: actions/checkout@v4
     - name: Use Node.js ${{ matrix.node-version }}
