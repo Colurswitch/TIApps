@@ -22,7 +22,7 @@ jobs:
     steps:
     - run: npm init
     # - run: npm i
-    - run: npm ci
+    # - run: npm ci
     - uses: actions/checkout@v4
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
