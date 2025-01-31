@@ -21,7 +21,7 @@ jobs:
 
     steps:
     - run: npm init
-    - run: npm i
+    # - run: npm i
     - run: npm ci
     - uses: actions/checkout@v4
     - name: Use Node.js ${{ matrix.node-version }}
