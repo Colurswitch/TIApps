@@ -82,6 +82,10 @@
                         <p>
                             No folder has been selected. <br>
                             <a href="javascript:app.selectLocalFolder();">Select a folder</a>
+                            <button class="mdc-button foo-button">
+                                <div class="mdc-button__ripple"></div>
+                                <span class="mdc-button__label">Button</span>
+                            </button>
                         </p>
                     </div>
                 </div>
@@ -117,6 +121,9 @@
             </div>
         </dialog>
         <script>
+            // Instantiate MD2
+            mdc.ripple.MDCRipple.attachTo(document.querySelector('.mdc-button'));
+
             var usbFunc = true;
             // Is the current browser compatible?
             if (!("usb" in navigator)) {
