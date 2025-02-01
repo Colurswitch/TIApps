@@ -55,27 +55,27 @@
     <body>
         <!-- Simple header with scrollable tabs. -->
         <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-            <header class="mdc-top-app-bar">
-            <div class="mdc-top-app-bar__row">
-                <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
-                    <!-- Title -->
-                    <span class="mdc-top-app-bar__title">TIApps</span>
-                </section>
-                <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end">
-                    <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Select Device">devices</button>
-                </section>
-            </div>
-            <!-- Tabs -->
-            <div class="mdl-layout__tab-bar mdl-js-ripple-effect">
-                <a href="#scroll-tab-1" class="mdl-layout__tab is-active">Local Files</a>
-                <a href="#scroll-tab-2" class="mdl-layout__tab">Online Files</a>
-                <a href="#scroll-tab-3" class="mdl-layout__tab">Connected Devices</a>
-                <a href="#scroll-tab-4" class="mdl-layout__tab">Tab 4</a>
-                <a href="#scroll-tab-5" class="mdl-layout__tab">Tab 5</a>
-                <a href="#scroll-tab-6" class="mdl-layout__tab">Tab 6</a>
-            </div>
+            <header class="mdc-top-app-bar" data-mdc-auto-init="MDCTopAppBar">
+                <div class="mdc-top-app-bar__row">
+                    <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+                        <!-- Title -->
+                        <span class="mdc-top-app-bar__title">TIApps</span>
+                    </section>
+                    <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end">
+                        <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Select Device">devices</button>
+                    </section>
+                </div>
+                <!-- Tabs -->
+                <div class="mdl-layout__tab-bar mdl-js-ripple-effect">
+                    <a href="#scroll-tab-1" class="mdl-layout__tab is-active">Local Files</a>
+                    <a href="#scroll-tab-2" class="mdl-layout__tab">Online Files</a>
+                    <a href="#scroll-tab-3" class="mdl-layout__tab">Connected Devices</a>
+                    <a href="#scroll-tab-4" class="mdl-layout__tab">Tab 4</a>
+                    <a href="#scroll-tab-5" class="mdl-layout__tab">Tab 5</a>
+                    <a href="#scroll-tab-6" class="mdl-layout__tab">Tab 6</a>
+                </div>
             </header>
-            <aside class="mdc-drawer mdc-drawer--dismissible mdc-top-app-bar--fixed-adjust">
+            <aside class="mdc-drawer mdc-top-app-bar--fixed-adjust" data-mdc-auto-init="MDCDrawer">
                 <div class="mdc-drawer__content">
                   <div class="mdc-list">
                     <a class="mdc-list-item mdc-list-item--activated" href="#" aria-current="page">
@@ -96,37 +96,37 @@
                   </div>
                 </div>
             </aside>
-            <main class="mdl-layout__content">
-            <section class="mdl-layout__tab-panel is-active" id="scroll-tab-1">
-                <div class="page-content">
-                    <div id="pnlNoFolder">
-                        <p>
-                            No folder has been selected. <br>
-                            <button class="mdc-button" onclick="app.selectLocalFolder();">
-                                <div class="mdc-button__ripple"></div>
-                                <span class="mdc-button__label">Select Folder</span>
-                            </button>
-                        </p>
+            <main class="mdc-top-app-bar--fixed-adjust">
+                <section class="mdl-layout__tab-panel is-active" id="scroll-tab-1">
+                    <div class="page-content">
+                        <div id="pnlNoFolder">
+                            <p>
+                                No folder has been selected. <br>
+                                <button class="mdc-button" onclick="app.selectLocalFolder();">
+                                    <div class="mdc-button__ripple"></div>
+                                    <span class="mdc-button__label">Select Folder</span>
+                                </button>
+                            </p>
+                        </div>
                     </div>
-                </div>
-            </section>
-            <section class="mdl-layout__tab-panel" id="scroll-tab-2">
-                <div class="page-content"><!-- Your content goes here -->
-                    tab 2
-                </div>
-            </section>
-            <section class="mdl-layout__tab-panel" id="scroll-tab-3">
-                <div class="page-content"><!-- Your content goes here --></div>
-            </section>
-            <section class="mdl-layout__tab-panel" id="scroll-tab-4">
-                <div class="page-content"><!-- Your content goes here --></div>
-            </section>
-            <section class="mdl-layout__tab-panel" id="scroll-tab-5">
-                <div class="page-content"><!-- Your content goes here --></div>
-            </section>
-            <section class="mdl-layout__tab-panel" id="scroll-tab-6">
-                <div class="page-content"><!-- Your content goes here --></div>
-            </section>
+                </section>
+                <section class="mdl-layout__tab-panel" id="scroll-tab-2">
+                    <div class="page-content"><!-- Your content goes here -->
+                        tab 2
+                    </div>
+                </section>
+                <section class="mdl-layout__tab-panel" id="scroll-tab-3">
+                    <div class="page-content"><!-- Your content goes here --></div>
+                </section>
+                <section class="mdl-layout__tab-panel" id="scroll-tab-4">
+                    <div class="page-content"><!-- Your content goes here --></div>
+                </section>
+                <section class="mdl-layout__tab-panel" id="scroll-tab-5">
+                    <div class="page-content"><!-- Your content goes here --></div>
+                </section>
+                <section class="mdl-layout__tab-panel" id="scroll-tab-6">
+                    <div class="page-content"><!-- Your content goes here --></div>
+                </section>
             </main>
         </div>
         <dialog class="mdl-dialog" id="dlgNoSupport">
@@ -144,7 +144,7 @@
         </dialog>
         <script>
             // Instantiate MD2
-            mdc.ripple.MDCRipple.attachTo(document.querySelector('.mdc-button'));
+            mdc.autoInit();
 
             var usbFunc = true;
             // Is the current browser compatible?
