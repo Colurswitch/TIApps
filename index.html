@@ -55,15 +55,15 @@
     <body>
         <!-- Simple header with scrollable tabs. -->
         <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-            <header class="mdl-layout__header">
-            <div class="mdl-layout__header-row">
-                <!-- Title -->
-                <span class="mdl-layout-title">TIApps</span>
-                <div class="mdl-layout-spacer"></div>
-                <nav class="mdl-navigation">
-                    <a href="javascript:app.selectDevice();" class="mdl-navigation__link">Select Device</a>
-                    <a href="#" class="mdl-navigation__link"><div><span class="material-icons">devices</span><div id="lblConnectedDevice">None</div></div></a>
-                </nav>
+            <header class="mdc-top-app-bar">
+            <div class="mdc-top-app-bar__row">
+                <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+                    <!-- Title -->
+                    <span class="mdc-top-app-bar__title">TIApps</span>
+                </section>
+                <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end">
+                    <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Select Device">devices</button>
+                </section>
             </div>
             <!-- Tabs -->
             <div class="mdl-layout__tab-bar mdl-js-ripple-effect">
@@ -75,23 +75,45 @@
                 <a href="#scroll-tab-6" class="mdl-layout__tab">Tab 6</a>
             </div>
             </header>
+            <aside class="mdc-drawer">
+                <div class="mdc-drawer__content">
+                  <nav class="mdc-list">
+                    <a class="mdc-list-item mdc-list-item--activated" href="#scroll-tab-1" aria-current="page">
+                      <span class="mdc-list-item__ripple"></span>
+                      <i class="material-icons mdc-list-item__graphic" aria-hidden="true">inbox</i>
+                      <span class="mdc-list-item__text">Inbox</span>
+                    </a>
+                    <a class="mdc-list-item" href="#scroll-tab-2">
+                      <span class="mdc-list-item__ripple"></span>
+                      <i class="material-icons mdc-list-item__graphic" aria-hidden="true">send</i>
+                      <span class="mdc-list-item__text">Outgoing</span>
+                    </a>
+                    <a class="mdc-list-item" href="#">
+                      <span class="mdc-list-item__ripple"></span>
+                      <i class="material-icons mdc-list-item__graphic" aria-hidden="true">drafts</i>
+                      <span class="mdc-list-item__text">Drafts</span>
+                    </a>
+                  </nav>
+                </div>
+            </aside>
             <main class="mdl-layout__content">
             <section class="mdl-layout__tab-panel is-active" id="scroll-tab-1">
                 <div class="page-content">
                     <div id="pnlNoFolder">
                         <p>
                             No folder has been selected. <br>
-                            <a href="javascript:app.selectLocalFolder();">Select a folder</a>
-                            <button class="mdc-button foo-button">
+                            <button class="mdc-button" onclick="app.selectLocalFolder();">
                                 <div class="mdc-button__ripple"></div>
-                                <span class="mdc-button__label">Button</span>
+                                <span class="mdc-button__label">Select Folder</span>
                             </button>
                         </p>
                     </div>
                 </div>
             </section>
             <section class="mdl-layout__tab-panel" id="scroll-tab-2">
-                <div class="page-content"><!-- Your content goes here --></div>
+                <div class="page-content"><!-- Your content goes here -->
+                    tab 2
+                </div>
             </section>
             <section class="mdl-layout__tab-panel" id="scroll-tab-3">
                 <div class="page-content"><!-- Your content goes here --></div>
