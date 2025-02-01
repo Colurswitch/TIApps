@@ -12,11 +12,11 @@
 
         <!-- Material Design Lite.
         <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.teal-red.min.css" />
-        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
         <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>-->
 
         <!-- Material Design 2 -->
         <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
         <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
         
         <!-- ticalc-usb (required for sending files) -->
@@ -26,17 +26,15 @@
         <style>
             body {
                 font-family: "Roboto";
+                margin: 0;
             }
 
-            .mdl-navigation__link {
-                display: flex!important;
-                flex-direction: row;
-                
+            .mdc-list-item {
+                color: rgb(66, 66, 66)!important;
             }
 
-            a > .material-icons {
-                margin: 0 0 0 10;
-                padding: 0;
+            .mdc-list-item > .material-icons {
+                margin-right: 15px;
             }
 
             #pnlNoFolder {
@@ -62,42 +60,37 @@
                         <span class="mdc-top-app-bar__title">TIApps</span>
                     </section>
                     <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end">
-                        <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Select Device">devices</button>
+                        <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Select Device" data-mdc-auto-init="MDCButton">
+                            <span class="mdc-button__ripple"></span>
+                            devices
+                        </button>
                     </section>
                 </div>
-                <!-- Tabs -->
-                <div class="mdl-layout__tab-bar mdl-js-ripple-effect">
-                    <a href="#scroll-tab-1" class="mdl-layout__tab is-active">Local Files</a>
-                    <a href="#scroll-tab-2" class="mdl-layout__tab">Online Files</a>
-                    <a href="#scroll-tab-3" class="mdl-layout__tab">Connected Devices</a>
-                    <a href="#scroll-tab-4" class="mdl-layout__tab">Tab 4</a>
-                    <a href="#scroll-tab-5" class="mdl-layout__tab">Tab 5</a>
-                    <a href="#scroll-tab-6" class="mdl-layout__tab">Tab 6</a>
-                </div>
             </header>
-            <aside class="mdc-drawer mdc-top-app-bar--fixed-adjust" data-mdc-auto-init="MDCDrawer">
+            <aside class="mdc-drawer mdc-drawer-dismissible mdc-top-app-bar--fixed-adjust" data-mdc-auto-init="MDCDrawer">
                 <div class="mdc-drawer__content">
-                  <div class="mdc-list">
-                    <a class="mdc-list-item mdc-list-item--activated" href="#" aria-current="page">
-                      <span class="mdc-list-item__ripple"></span>
-                      <i class="material-icons mdc-list-item__graphic" aria-hidden="true">inbox</i>
-                      <span class="mdc-list-item__text">Inbox</span>
-                    </a>
-                    <a class="mdc-list-item" href="#">
-                      <span class="mdc-list-item__ripple"></span>
-                      <i class="material-icons mdc-list-item__graphic" aria-hidden="true">send</i>
-                      <span class="mdc-list-item__text">Outgoing</span>
-                    </a>
-                    <a class="mdc-list-item" href="#">
-                      <span class="mdc-list-item__ripple"></span>
-                      <i class="material-icons mdc-list-item__graphic" aria-hidden="true">drafts</i>
-                      <span class="mdc-list-item__text">Drafts</span>
-                    </a>
-                  </div>
+                    <nav class="mdc-list">
+                        <a class="mdc-list-item mdc-list-item--activated" href="#" aria-current="page">
+                            <span class="mdc-list-item__ripple"></span>
+                            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">inbox</i>
+                            <span class="mdc-list-item__text">Inbox</span>
+                        </a>
+                        <a class="mdc-list-item" href="#">
+                            <span class="mdc-list-item__ripple"></span>
+                            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">send</i>
+                            <span class="mdc-list-item__text">Outgoing</span>
+                        </a>
+                        <a class="mdc-list-item" href="#">
+                            <span class="mdc-list-item__ripple"></span>
+                            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">drafts</i>
+                            <span class="mdc-list-item__text">Drafts</span>
+                        </a>
+                    </nav>
                 </div>
             </aside>
             <main class="mdc-top-app-bar--fixed-adjust">
-                <section class="mdl-layout__tab-panel is-active" id="scroll-tab-1">
+                
+                <section class="page" id="pgLocalFolders">
                     <div class="page-content">
                         <div id="pnlNoFolder">
                             <p>
@@ -110,7 +103,7 @@
                         </div>
                     </div>
                 </section>
-                <section class="mdl-layout__tab-panel" id="scroll-tab-2">
+                <section class="page" id="scroll-tab-2">
                     <div class="page-content"><!-- Your content goes here -->
                         tab 2
                     </div>
