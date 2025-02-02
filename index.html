@@ -8,33 +8,55 @@
         <!-- Meta tags for optimization -->
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="author" content="ColurMine">
+        <meta name="keywords" content="calculators calcs calc files sending ti-*">
         <meta name="description" content="A web app that allows sending files to graphing calculators, without having to download them first.">
 
         <!-- Material Design Lite.
         <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.teal-red.min.css" />
         <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>-->
 
-        <!-- Material Design 2 -->
-        <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
-        <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+        <!-- Material Design 2 
+        <link defer href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+        <script defer src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>-->
         
         <!-- ticalc-usb (required for sending files) -->
         <script defer src="https://unpkg.com/ticalc-usb@1.1.2/dist/index.js"></script>
+        <script src="/ticalc.js"></script>
 
         <!-- Internal styling -->
         <style>
+            @import "https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap";
+            @import "https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css";
+            @import "https://fonts.googleapis.com/icon?family=Material+Icons";
+
             body {
                 font-family: "Roboto";
                 margin: 0;
+                overflow: hidden;
+                max-height: 100vh;
             }
 
-            .mdc-list-item {
-                color: rgb(66, 66, 66)!important;
+            button > .icon-text {
+                margin-left: 5px;
             }
 
-            .mdc-list-item > .material-icons {
-                margin-right: 15px;
+            .menu {
+                background-color: rgb(255, 255, 255);
+                
+            }
+
+            .menu > ul {
+                margin-left: 10px;
+            }
+
+            .menu-header {
+                margin: 15px;
+            }
+
+            .menu-header > h3 {
+                color: gray;
             }
 
             #pnlNoFolder {
@@ -52,72 +74,85 @@
     </head>
     <body>
         <!-- Simple header with scrollable tabs. -->
-        <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-            <aside class="mdc-drawer mdc-drawer-dismissible" data-mdc-auto-init="MDCDrawer">
-                <div class="mdc-drawer__header">
-                    <h3 class="mdc-drawer__title">TIApps</h3>
-                    <h6 class="mdc-drawer__subtitle">
-                        <span class="material-icons">devices</span>
-                        <span id="lblSelectedDeviceName">None</span>
-                    </h6>
-                </div>
-                <div class="mdc-drawer__content">
-                    <nav class="mdc-list" data-mdc-auto-init="MDCList">
-                        <a class="mdc-list-item mdc-list-item--activated" href="javascript:app.selectDevice();" aria-current="page">
-                            <span class="mdc-list-item__ripple"></span>
-                            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">devices</i>
-                            <span class="mdc-list-item__text">Select device</span>
-                        </a>
-                        <a class="mdc-list-item" href="#">
-                            <span class="mdc-list-item__ripple"></span>
-                            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">send</i>
-                            <span class="mdc-list-item__text">Outgoing</span>
-                        </a>
-                        <a class="mdc-list-item" href="#">
-                            <span class="mdc-list-item__ripple"></span>
-                            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">drafts</i>
-                            <span class="mdc-list-item__text">Drafts</span>
-                        </a>
-                    </nav>
-                </div>
-            </aside>
-            <div class="mdc-drawer-app-content">
-                <main class="main-content">
-                    <div class="mdc-top-app-bar--fixed-adjust">
-                        <section class="page" id="pgLocalFolders">
-                            <div class="page-content">
-                                <div id="pnlNoFolder">
-                                    <p>
-                                        No folder has been selected. <br>
-                                        <button class="mdc-button" onclick="app.selectLocalFolder();" data-mdc-auto-init="MDCRipple">
-                                            <div class="mdc-button__ripple"></div>
-                                            <span class="mdc-button__label">Select Folder</span>
-                                        </button>
-                                    </p>
-                                </div>
+        <div class="columns">
+        <div class="menu column is-one-quarter">
+            <div class="menu-header">
+                <h1>TIApps</h1>
+                <h3>
+                    <span class="icon-text">
+                        <span class="icon"><span class="material-icons">devices</span></span>
+                        <span id="lblConnectedDeviceName">None</span></span>
+                    </span>
+                </h3>
+            </div>
+            <ul class="menu-list">
+                <li>
+                    <button href="javascript:app.selectDevice();" class="button">
+                        <span class="icon-text">
+                            <span class="icon">
+                                <span class="material-icons">devices</span>
+                            </span>
+                            <span>Select device</span>
+                        </span>
+                    </button>
+                </li>
+                <li>
+                    <a href="javascript:openPage('pgLocalFolders');">
+                        <span class="icon-text">
+                            <span class="icon">
+                                <span class="material-icons">folder</span>
+                            </span>
+                            <span>Local Folders</span>
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:openPage('pgLocalFolders');">
+                        <span class="icon-text">
+                            <span class="icon">
+                                <span class="material-icons">travel_explore</span>
+                            </span>
+                            <span>Online Files</span>
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:openPage('pgLocalFolders');">
+                        <span class="icon-text">
+                            <span class="icon">
+                                <span class="material-icons">settings</span>
+                            </span>
+                            <span>Settings</span>
+                        </span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="column">
+            <main class="main-content">
+                <div class="mdc-top-app-bar--fixed-adjust">
+                    <section class="page" id="pgLocalFolders">
+                        <div class="page-content">
+                            <div id="pnlNoFolder">
+                                <p>
+                                    No folder has been selected. <br>
+                                    <button class="button" onclick="app.selectLocalFolder();">
+                                        <span class="mdc-button__label">Select Folder</span>
+                                    </button>
+                                </p>
                             </div>
-                        </section>
-                        <section class="page" id="scroll-tab-2">
+                        </div>
+                    </section>
+                    <section class="page" id="pgOnlineFiles" style="display: none;">
                             <div class="page-content"><!-- Your content goes here -->
                                 tab 2
                             </div>
-                        </section>
-                        <section class="mdl-layout__tab-panel" id="scroll-tab-3">
-                            <div class="page-content"><!-- Your content goes here --></div>
-                        </section>
-                        <section class="mdl-layout__tab-panel" id="scroll-tab-4">
-                            <div class="page-content"><!-- Your content goes here --></div>
-                        </section>
-                        <section class="mdl-layout__tab-panel" id="scroll-tab-5">
-                            <div class="page-content"><!-- Your content goes here --></div>
-                        </section>
-                        <section class="mdl-layout__tab-panel" id="scroll-tab-6">
-                            <div class="page-content"><!-- Your content goes here --></div>
-                        </section>
-                    </div>
-                </main>
-            </div>
+                    </section>
+                </div>
+            </main>
         </div>
+        </div>
+        
         <dialog class="mdl-dialog" id="dlgNoSupport">
             <h5 class="mdl-dialog__title">Warning</h5>
             <div class="mdl-dialog__content">
@@ -159,6 +194,50 @@
                 }
                 document.getElementById(page).style.display = "block";
             }
+
+            // Modal triggers
+            document.addEventListener('DOMContentLoaded', () => {
+                // Functions to open and close a modal
+                function openModal($el) {
+                    $el.classList.add('is-active');
+                }
+
+                function closeModal($el) {
+                    $el.classList.remove('is-active');
+                }
+
+                function closeAllModals() {
+                    (document.querySelectorAll('.modal') || []).forEach(($modal) => {
+                    closeModal($modal);
+                    });
+                }
+
+                // Add a click event on buttons to open a specific modal
+                (document.querySelectorAll('.js-modal-trigger') || []).forEach(($trigger) => {
+                    const modal = $trigger.dataset.target;
+                    const $target = document.getElementById(modal);
+
+                    $trigger.addEventListener('click', () => {
+                    openModal($target);
+                    });
+                });
+
+                // Add a click event on various child elements to close the parent modal
+                (document.querySelectorAll('.modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .button') || []).forEach(($close) => {
+                    const $target = $close.closest('.modal');
+
+                    $close.addEventListener('click', () => {
+                    closeModal($target);
+                    });
+                });
+
+                // Add a keyboard event to close all modals
+                document.addEventListener('keydown', (event) => {
+                    if(event.key === "Escape") {
+                    closeAllModals();
+                    }
+                });
+            });
         </script>
     </body>
 </html>
