@@ -53,27 +53,20 @@
     <body>
         <!-- Simple header with scrollable tabs. -->
         <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-            <header class="mdc-top-app-bar" data-mdc-auto-init="MDCTopAppBar">
-                <div class="mdc-top-app-bar__row">
-                    <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
-                        <!-- Title -->
-                        <span class="mdc-top-app-bar__title">TIApps</span>
-                    </section>
-                    <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end">
-                        <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Select Device" data-mdc-auto-init="MDCButton">
-                            <span class="mdc-button__ripple"></span>
-                            devices
-                        </button>
-                    </section>
+            <aside class="mdc-drawer mdc-drawer-dismissible" data-mdc-auto-init="MDCDrawer">
+                <div class="mdc-drawer__header">
+                    <h3 class="mdc-drawer__title">TIApps</h3>
+                    <h6 class="mdc-drawer__subtitle">
+                        <span class="material-icons">devices</span>
+                        <span id="lblSelectedDeviceName">None</span>
+                    </h6>
                 </div>
-            </header>
-            <aside class="mdc-drawer mdc-drawer-dismissible mdc-top-app-bar--fixed-adjust" data-mdc-auto-init="MDCDrawer">
                 <div class="mdc-drawer__content">
-                    <nav class="mdc-list">
-                        <a class="mdc-list-item mdc-list-item--activated" href="#" aria-current="page">
+                    <nav class="mdc-list" data-mdc-auto-init="MDCList">
+                        <a class="mdc-list-item mdc-list-item--activated" href="javascript:app.selectDevice();" aria-current="page">
                             <span class="mdc-list-item__ripple"></span>
-                            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">inbox</i>
-                            <span class="mdc-list-item__text">Inbox</span>
+                            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">devices</i>
+                            <span class="mdc-list-item__text">Select device</span>
                         </a>
                         <a class="mdc-list-item" href="#">
                             <span class="mdc-list-item__ripple"></span>
@@ -88,39 +81,42 @@
                     </nav>
                 </div>
             </aside>
-            <main class="mdc-top-app-bar--fixed-adjust">
-                
-                <section class="page" id="pgLocalFolders">
-                    <div class="page-content">
-                        <div id="pnlNoFolder">
-                            <p>
-                                No folder has been selected. <br>
-                                <button class="mdc-button" onclick="app.selectLocalFolder();">
-                                    <div class="mdc-button__ripple"></div>
-                                    <span class="mdc-button__label">Select Folder</span>
-                                </button>
-                            </p>
-                        </div>
+            <div class="mdc-drawer-app-content">
+                <main class="main-content">
+                    <div class="mdc-top-app-bar--fixed-adjust">
+                        <section class="page" id="pgLocalFolders">
+                            <div class="page-content">
+                                <div id="pnlNoFolder">
+                                    <p>
+                                        No folder has been selected. <br>
+                                        <button class="mdc-button" onclick="app.selectLocalFolder();" data-mdc-auto-init="MDCRipple">
+                                            <div class="mdc-button__ripple"></div>
+                                            <span class="mdc-button__label">Select Folder</span>
+                                        </button>
+                                    </p>
+                                </div>
+                            </div>
+                        </section>
+                        <section class="page" id="scroll-tab-2">
+                            <div class="page-content"><!-- Your content goes here -->
+                                tab 2
+                            </div>
+                        </section>
+                        <section class="mdl-layout__tab-panel" id="scroll-tab-3">
+                            <div class="page-content"><!-- Your content goes here --></div>
+                        </section>
+                        <section class="mdl-layout__tab-panel" id="scroll-tab-4">
+                            <div class="page-content"><!-- Your content goes here --></div>
+                        </section>
+                        <section class="mdl-layout__tab-panel" id="scroll-tab-5">
+                            <div class="page-content"><!-- Your content goes here --></div>
+                        </section>
+                        <section class="mdl-layout__tab-panel" id="scroll-tab-6">
+                            <div class="page-content"><!-- Your content goes here --></div>
+                        </section>
                     </div>
-                </section>
-                <section class="page" id="scroll-tab-2">
-                    <div class="page-content"><!-- Your content goes here -->
-                        tab 2
-                    </div>
-                </section>
-                <section class="mdl-layout__tab-panel" id="scroll-tab-3">
-                    <div class="page-content"><!-- Your content goes here --></div>
-                </section>
-                <section class="mdl-layout__tab-panel" id="scroll-tab-4">
-                    <div class="page-content"><!-- Your content goes here --></div>
-                </section>
-                <section class="mdl-layout__tab-panel" id="scroll-tab-5">
-                    <div class="page-content"><!-- Your content goes here --></div>
-                </section>
-                <section class="mdl-layout__tab-panel" id="scroll-tab-6">
-                    <div class="page-content"><!-- Your content goes here --></div>
-                </section>
-            </main>
+                </main>
+            </div>
         </div>
         <dialog class="mdl-dialog" id="dlgNoSupport">
             <h5 class="mdl-dialog__title">Warning</h5>
