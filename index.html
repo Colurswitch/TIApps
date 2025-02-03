@@ -1,81 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>TIApps</title>
-        <!-- Favicon -->
-        <!--<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">-->
 
-        <!-- Meta tags for optimization -->
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="author" content="ColurMine">
-        <meta name="keywords" content="calculators calcs calc files sending ti-*">
-        <meta name="description" content="A web app that allows sending files to graphing calculators, without having to download them first.">
+<head>
+    <title>TIApps</title>
+    <!-- Favicon -->
+    <!--<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">-->
 
-        <!-- Material Design Lite.
+    <!-- Meta tags for optimization -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="author" content="ColurMine">
+    <meta name="keywords" content="calculators calcs calc files sending ti-*">
+    <meta name="description"
+        content="A web app that allows sending files to graphing calculators, without having to download them first.">
+
+    <!-- Material Design Lite.
         <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.teal-red.min.css" />
         <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>-->
 
-        <!-- Material Design 2 
+    <!-- Material Design 2 
         <link defer href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
         <script defer src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>-->
-        
-        <!-- ticalc-usb (required for sending files) -->
-        <script defer src="https://unpkg.com/ticalc-usb@1.1.2/dist/index.js"></script>
-        <script src="/ticalc.js"></script>
 
-        <!-- Internal styling -->
-        <style>
-            @import "https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap";
-            @import "https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css";
-            @import "https://fonts.googleapis.com/icon?family=Material+Icons";
+    <!-- ticalc-usb (required for sending files) -->
+    <script defer src="https://unpkg.com/ticalc-usb@1.1.2/dist/index.js"></script>
+    <script src="/ticalc.js"></script>
 
-            body {
-                font-family: "Roboto";
-                margin: 0;
-                overflow: hidden;
-                max-height: 100vh;
-            }
+    <!-- Internal styling -->
+    <style>
+        @import "https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap";
+        @import "https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css";
+        @import "https://fonts.googleapis.com/icon?family=Material+Icons";
 
-            button > .icon-text {
-                margin-left: 5px;
-            }
+        body {
+            font-family: "Roboto";
+            margin: 0;
+            overflow: hidden;
+            max-height: 100vh;
+        }
 
-            .menu {
-                background-color: rgb(255, 255, 255);
-                
-            }
+        button>.icon-text {
+            margin-left: 5px;
+        }
 
-            .menu > ul {
-                margin-left: 10px;
-            }
+        .menu {
+            background-color: rgb(255, 255, 255);
 
-            .menu-header {
-                margin: 15px;
-            }
+        }
 
-            .menu-header > h3 {
-                color: gray;
-            }
+        .menu>ul {
+            margin-left: 10px;
+        }
 
-            #pnlNoFolder {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                height: 100vh;
-                overflow: hidden;
-            }
+        .menu-header {
+            margin: 15px;
+        }
 
-            #pnlNoFolder > p {
-                text-align: center;
-            }
-        </style>
-    </head>
-    <body>
-        <!-- Simple header with scrollable tabs. -->
-        <div class="columns">
-        <div class="menu column is-one-quarter">
+        .menu-header>h3 {
+            color: gray;
+        }
+
+        #pnlNoFolder {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        #pnlNoFolder>p {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Simple header with scrollable tabs. -->
+    <div class="columns">
+        <div class="menu column is-one-fifth-desktop is-one-quarter-mobile">
             <div class="menu-header">
                 <h1>TIApps</h1>
                 <h3>
@@ -107,7 +110,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="javascript:openPage('pgLocalFolders');">
+                    <a href="javascript:openPage('pgOnlineFiles');">
                         <span class="icon-text">
                             <span class="icon">
                                 <span class="material-icons">travel_explore</span>
@@ -129,11 +132,11 @@
             </ul>
         </div>
         <div class="column">
-            <main class="main-content">
+            <main class="main-content block">
                 <div class="mdc-top-app-bar--fixed-adjust">
                     <section class="page" id="pgLocalFolders">
-                        <div class="page-content">
-                            <div id="pnlNoFolder">
+                        <div class="page-content box">
+                            <div id="pnlNoFolder" style="display: none;">
                                 <p>
                                     No folder has been selected. <br>
                                     <button class="button" onclick="app.selectLocalFolder();">
@@ -141,103 +144,145 @@
                                     </button>
                                 </p>
                             </div>
+                            <div id="pnlLocalFolders" class="columns">
+                                <aside class="menu column is-one-quarter">
+                                    <ul class="menu-list">
+                                        <!-- List of folders -->
+                                        <!-- This list will be populated automatically.
+                                             Example: <li><a href="javascript:app.showFolderContents('path/to/file.8*p')">folder name</a></li> -->
+                                        <li><a href="#">No files found</a></li>
+                                    </ul>
+                                </aside>
+                            </div>
                         </div>
                     </section>
                     <section class="page" id="pgOnlineFiles" style="display: none;">
-                            <div class="page-content"><!-- Your content goes here -->
-                                tab 2
-                            </div>
+                        <div class="page-content">
+                            tab 2
+                        </div>
                     </section>
                 </div>
             </main>
         </div>
-        </div>
-        
-        <dialog class="mdl-dialog" id="dlgNoSupport">
-            <h5 class="mdl-dialog__title">Warning</h5>
-            <div class="mdl-dialog__content">
+    </div>
+
+    <div class="modal" id="dlgNoSupport">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title">Warning</p>
+            </header>
+            <section class="modal-card-body">
                 <p>
                     The current browser has no support for WebUSB! <br>
                     You will only be able to browse files, USB functionality <br>
-                    has ben disabled.
+                    has been disabled.
                 </p>
-            </div>
-            <div class="mdl-dialog__actions">
-                <button type="button" class="mdl-button close" onclick="document.getElementById('dlgNoSupport').close()">Ok</button>
-            </div>
-        </dialog>
-        <script>
-            // Instantiate MD2
-            mdc.autoInit();
+            </section>
+            <footer class="modal-card-foot">
+                <div class="buttons">
+                    <button class="button">Ok</button>
+                </div>
+            </footer>
+        </div>
+    </div>
+    <script>
+        // Instantiate MD2
+        mdc.autoInit();
 
-            var usbFunc = true;
-            // Is the current browser compatible?
-            if (!("usb" in navigator)) {
-                document.getElementById("dlgNoSupport").showModal();
-                usbFunc = false;
+        var usbFunc = true;
+        
+
+        const app = {
+            /**
+             * Sends a file to the connected calculator.
+             * @param {string} path - The path to the file to send.
+             */
+            sendFile: function (path) {
+                if (usbFunc) {
+                    ticalc_usb.sendFile(path);
+
+                }
+            },
+            selectLocalFolder: function () {
+                // Ask the user to select a folder
+                window.showDirectoryPicker()
+                    .then(async root => {
+                        // Get a list of all files in the folder
+                        const entries = await root.getEntries();
+                        const files = [];
+                        for await (const entry of entries) {
+                            if (entry.isFile) {
+                                files.push(entry.fullPath);
+                            }
+                        }
+                        console.log(files);
+                        console.log(files.length == 0 ? "No programs were found." : `${files.length} files have been found!`);
+                        return files;
+                    })
+                    .catch(err => console.error(err));
+            }
+        }
+
+        // Pages
+        function openPage(page) {
+            var pages = document.getElementsByClassName("page");
+            for (var i; i < pages.length; i++) {
+                pages.item(i).style.display = "none";
+            }
+            document.getElementById(page).style.display = "block";
+        }
+
+        // Modal triggers
+        document.addEventListener('DOMContentLoaded', () => {
+            // Functions to open and close a modal
+            function openModal($el) {
+                $el.classList.add('is-active');
             }
 
-            const app = {
-                sendFile : function(path){
-                    if (usbFunc) {
-                        ticalc_usb.sendFile(path);
-                        
-                    }
-                }
+            function closeModal($el) {
+                $el.classList.remove('is-active');
             }
 
-            // Pages
-            function openPage(page) {
-                var pages = document.getElementsByClassName("page");
-                for (var i;i<pages.length;i++) {
-                    pages.item(i).style.display = "none";
-                }
-                document.getElementById(page).style.display = "block";
-            }
-
-            // Modal triggers
-            document.addEventListener('DOMContentLoaded', () => {
-                // Functions to open and close a modal
-                function openModal($el) {
-                    $el.classList.add('is-active');
-                }
-
-                function closeModal($el) {
-                    $el.classList.remove('is-active');
-                }
-
-                function closeAllModals() {
-                    (document.querySelectorAll('.modal') || []).forEach(($modal) => {
+            function closeAllModals() {
+                (document.querySelectorAll('.modal') || []).forEach(($modal) => {
                     closeModal($modal);
-                    });
-                }
+                });
+            }
 
-                // Add a click event on buttons to open a specific modal
-                (document.querySelectorAll('.js-modal-trigger') || []).forEach(($trigger) => {
-                    const modal = $trigger.dataset.target;
-                    const $target = document.getElementById(modal);
+            // Add a click event on buttons to open a specific modal
+            (document.querySelectorAll('.js-modal-trigger') || []).forEach(($trigger) => {
+                const modal = $trigger.dataset.target;
+                const $target = document.getElementById(modal);
 
-                    $trigger.addEventListener('click', () => {
+                $trigger.addEventListener('click', () => {
                     openModal($target);
-                    });
-                });
-
-                // Add a click event on various child elements to close the parent modal
-                (document.querySelectorAll('.modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .button') || []).forEach(($close) => {
-                    const $target = $close.closest('.modal');
-
-                    $close.addEventListener('click', () => {
-                    closeModal($target);
-                    });
-                });
-
-                // Add a keyboard event to close all modals
-                document.addEventListener('keydown', (event) => {
-                    if(event.key === "Escape") {
-                    closeAllModals();
-                    }
                 });
             });
-        </script>
-    </body>
+
+            // Add a click event on various child elements to close the parent modal
+            (document.querySelectorAll('.modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .button') || []).forEach(($close) => {
+                const $target = $close.closest('.modal');
+
+                $close.addEventListener('click', () => {
+                    closeModal($target);
+                });
+            });
+
+            // Add a keyboard event to close all modals
+            document.addEventListener('keydown', (event) => {
+                if (event.key === "Escape") {
+                    closeAllModals();
+                }
+            });
+
+            // Is the current browser compatible?
+            if (!("usb" in navigator)) {
+                openModal(document.getElementById("dlgNoSupport"));
+                usbFunc = false;
+            }
+        });
+    </script>
+</body>
+
 </html>

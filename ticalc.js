@@ -1,6 +1,16 @@
 const { ticalc, tifiles } = require('ticalc-usb');
 
-await ticalc.init({supportLevel:"none"});
+ticalc.init({supportLevel:"none"}).then((result) => {
+    
+}).catch((err) => {
+    console.log(err);
+});
+
+/**
+ * Asynchronously selects a device using the ticalc library.
+ * Attempts to choose a connected calculator device.
+ * Logs an error to the console if the selection fails.
+ */
 
 async function selectDevice() {
     try {
