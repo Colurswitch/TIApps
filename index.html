@@ -77,93 +77,9 @@
 
 <body>
     <!-- Simple header with scrollable tabs. -->
-    <div class="columns">
-        <div class="menu column is-one-fifth-desktop is-one-quarter-mobile">
-            <div class="menu-header">
-                <h1>TIApps</h1>
-                <h3>
-                    <span class="icon-text">
-                        <span class="icon"><span class="material-icons">devices</span></span>
-                        <span id="lblConnectedDeviceName">None</span></span>
-                    </span>
-                </h3>
-            </div>
-            <ul class="menu-list">
-                <li>
-                    <button href="javascript:app.selectDevice();" class="button">
-                        <span class="icon-text">
-                            <span class="icon">
-                                <span class="material-icons">devices</span>
-                            </span>
-                            <span>Select device</span>
-                        </span>
-                    </button>
-                </li>
-                <li>
-                    <a href="javascript:openPage('pgLocalFolders');">
-                        <span class="icon-text">
-                            <span class="icon">
-                                <span class="material-icons">folder</span>
-                            </span>
-                            <span>Local Folders</span>
-                        </span>
-                    </a>
-                </li>
-                <li>
-                    <a href="javascript:openPage('pgOnlineFiles');">
-                        <span class="icon-text">
-                            <span class="icon">
-                                <span class="material-icons">travel_explore</span>
-                            </span>
-                            <span>Online Files</span>
-                        </span>
-                    </a>
-                </li>
-                <li>
-                    <a href="javascript:openPage('pgLocalFolders');">
-                        <span class="icon-text">
-                            <span class="icon">
-                                <span class="material-icons">settings</span>
-                            </span>
-                            <span>Settings</span>
-                        </span>
-                    </a>
-                </li>
-            </ul>
-        </div>
-        <div class="column">
-            <main class="main-content block">
-                <div class="mdc-top-app-bar--fixed-adjust">
-                    <section class="page" id="pgLocalFolders">
-                        <div class="page-content box">
-                            <div id="pnlNoFolder" style="display: none;">
-                                <p>
-                                    No folder has been selected. <br>
-                                    <button class="button" onclick="app.selectLocalFolder();">
-                                        <span class="mdc-button__label">Select Folder</span>
-                                    </button>
-                                </p>
-                            </div>
-                            <div id="pnlLocalFolders" class="columns">
-                                <aside class="menu column is-one-quarter">
-                                    <ul class="menu-list">
-                                        <!-- List of folders -->
-                                        <!-- This list will be populated automatically.
-                                             Example: <li><a href="javascript:app.showFolderContents('path/to/file.8*p')">folder name</a></li> -->
-                                        <li><a href="#">No files found</a></li>
-                                    </ul>
-                                </aside>
-                            </div>
-                        </div>
-                    </section>
-                    <section class="page" id="pgOnlineFiles" style="display: none;">
-                        <div class="page-content">
-                            tab 2
-                        </div>
-                    </section>
-                </div>
-            </main>
-        </div>
+    <div class="box">
+        <h1>TIApps</h1>
+        <p
     </div>
 
     <div class="modal" id="dlgNoSupport">
@@ -187,101 +103,18 @@
         </div>
     </div>
     <script>
-        // Instantiate MD2
-        mdc.autoInit();
-
-        var usbFunc = true;
-        
-
-        const app = {
-            /**
-             * Sends a file to the connected calculator.
-             * @param {string} path - The path to the file to send.
-             */
-            sendFile: function (path) {
-                if (usbFunc) {
-                    ticalc_usb.sendFile(path);
-
-                }
-            },
-            selectLocalFolder: function () {
-                // Ask the user to select a folder
-                window.showDirectoryPicker()
-                    .then(async root => {
-                        // Get a list of all files in the folder
-                        const entries = await root.getEntries();
-                        const files = [];
-                        for await (const entry of entries) {
-                            if (entry.isFile) {
-                                files.push(entry.fullPath);
-                            }
-                        }
-                        console.log(files);
-                        console.log(files.length == 0 ? "No programs were found." : `${files.length} files have been found!`);
-                        return files;
-                    })
-                    .catch(err => console.error(err));
-            }
-        }
-
-        // Pages
-        function openPage(page) {
-            var pages = document.getElementsByClassName("page");
-            for (var i; i < pages.length; i++) {
-                pages.item(i).style.display = "none";
-            }
-            document.getElementById(page).style.display = "block";
-        }
-
-        // Modal triggers
-        document.addEventListener('DOMContentLoaded', () => {
-            // Functions to open and close a modal
-            function openModal($el) {
-                $el.classList.add('is-active');
-            }
-
-            function closeModal($el) {
-                $el.classList.remove('is-active');
-            }
-
-            function closeAllModals() {
-                (document.querySelectorAll('.modal') || []).forEach(($modal) => {
-                    closeModal($modal);
+        window.addEventListener("DOMContentLoaded", function() {
+            if (!navigator.usb) {
+                document.getElementById("dlgNoSupport").style.display = "block";
+            } else {
+                // Read base64-encoded files from url parameter
+                var fileParam = new URLSearchParams(window.location.search);
+                var filesBase64 = fileParam.get("files").split(",");
+                filesBase64.forEach(file => {
+                    bota
                 });
             }
-
-            // Add a click event on buttons to open a specific modal
-            (document.querySelectorAll('.js-modal-trigger') || []).forEach(($trigger) => {
-                const modal = $trigger.dataset.target;
-                const $target = document.getElementById(modal);
-
-                $trigger.addEventListener('click', () => {
-                    openModal($target);
-                });
-            });
-
-            // Add a click event on various child elements to close the parent modal
-            (document.querySelectorAll('.modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .button') || []).forEach(($close) => {
-                const $target = $close.closest('.modal');
-
-                $close.addEventListener('click', () => {
-                    closeModal($target);
-                });
-            });
-
-            // Add a keyboard event to close all modals
-            document.addEventListener('keydown', (event) => {
-                if (event.key === "Escape") {
-                    closeAllModals();
-                }
-            });
-
-            // Is the current browser compatible?
-            if (!("usb" in navigator)) {
-                openModal(document.getElementById("dlgNoSupport"));
-                usbFunc = false;
-            }
-        });
+        })
     </script>
 </body>
 
