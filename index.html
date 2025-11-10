@@ -14,107 +14,727 @@
     <meta name="keywords" content="calculators calcs calc files sending ti-*">
     <meta name="description"
         content="A web app that allows sending files to graphing calculators, without having to download them first.">
-
-    <!-- Material Design Lite.
-        <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.teal-red.min.css" />
-        <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>-->
-
-    <!-- Material Design 2 
-        <link defer href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
-        <script defer src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>-->
-
-    <!-- ticalc-usb (required for sending files) -->
-    <script defer src="https://unpkg.com/ticalc-usb@1.1.2/dist/index.js"></script>
-    <script src="/ticalc.js"></script>
-
-    <!-- Internal styling -->
+    <script src="ticalc-usb.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css"
+>
     <style>
         @import "https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap";
-        @import "https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css";
-        @import "https://fonts.googleapis.com/icon?family=Material+Icons";
+        @import "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200";
 
         body {
             font-family: "Roboto";
             margin: 0;
-            overflow: hidden;
+            padding: 0;
             max-height: 100vh;
         }
 
-        button>.icon-text {
-            margin-left: 5px;
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 1;
         }
 
-        .menu {
-            background-color: rgb(255, 255, 255);
-
+        .spacer {
+            flex-grow: 1;
         }
 
-        .menu>ul {
-            margin-left: 10px;
-        }
-
-        .menu-header {
-            margin: 15px;
-        }
-
-        .menu-header>h3 {
-            color: gray;
-        }
-
-        #pnlNoFolder {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        #pnlNoFolder>p {
-            text-align: center;
+        .PageContent {
+            margin: 10px;
         }
     </style>
 </head>
 
 <body>
-    <!-- Simple header with scrollable tabs. -->
-    <div class="box">
-        <h1>TIApps</h1>
-        <p
+    <progress class="progress is-intermediate is-primary" id="loader" style="width: 100%; margin: 0; border-radius: 0;"></progress>
+    <div class="tabs is-centered is-primary" style="position: sticky; top: 0; left: 0; margin: 0">
+        <ul>
+            <li class="PageTab is-active" id="page.localFiles.btn">
+                <a class="icon-text">
+                    <span class="material-symbols-outlined">
+                        folder
+                    </span>
+                    Local files
+                </a>
+            </li>
+            <li class="PageTab" id="page.onlineFiles.btn">
+                <a class="icon-text">
+                    <span class="material-symbols-outlined">
+                        globe
+                    </span>
+                    Online Files
+                </a>
+            </li>
+            <li class="PageTab" id="page.settings.btn">
+                <a class="icon-text">
+                    <span class="material-symbols-outlined">
+                        settings
+                    </span>
+                    Settings
+                </a>
+            </li>
+            <li class="PageTab" id="page.about.btn">
+                <a class="icon-text">
+                    <span class="material-symbols-outlined">
+                        info
+                    </span>
+                    About
+                </a>
+            </li>
+            <div class="spacer"></div>
+            <li class="PageTab" id="changeDevice">
+                <a class="icon-text">
+                    <span class="material-symbols-outlined">
+                        device_hub
+                    </span>
+                    <span id="currentDevice">Device</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="PageContent" id="page.localFiles.content">
+        <article class="message is-danger">
+            <div class="message-body">Please send files with caution. Sending invalid files to calculators can cause memory corruption, resulting in a hard reset.</div>
+        </article>
+        <article class="message" id="deviceInfo">
+            <div class="message-header">
+                <p>Device</p>
+            </div>
+            <div class="message-body">
+                Please connect a device.
+            </div>
+        </article>
+        <div class="buttons">
+            <button class="button is-primary" id="localFiles.addFileBtn">Add file</button>
+            <button class="button" id="localFiles.sendAllFiles">Send all</button>
+            <button class="button is-danger" id="localFiles.deleteAllFiles">Delete all</button>
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Size</th>
+                    <th>Type</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="localFiles.files">
+                <tr>
+                    <td>file</td>
+                    <td>1234567890</td>
+                    <td>TT-84 Plus Family Variable (.8xv)</td>
+                    <td>
+                        <button class="button is-primary">Send</button>
+                        <button class="button is-danger">Delete</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="PageContent" id="page.onlineFiles.content">
+        <div class="field has-addons">
+            <div class="control">
+                <input class="input" type="text" placeholder="Query" id="onlineSearch.query">
+            </div>
+            <div class="control">
+                <div class="control has-icons-left">
+                    <div class="select">
+                        <select id="onlineSearch.deviceFilter">
+                            <option selected>Country</option>
+                            <option>Select dropdown</option>
+                            <option>With options</option>
+                        </select>
+                    </div>
+                    <span class="icon is-left">
+                        <span class="material-symbols-outlined">devices</span>
+                    </span>
+                </div>
+            </div>
+            <div class="control">
+                <div class="control has-icons-left">
+                    <div class="select">
+                        <select id="onlineSearch.categoryFilter">
+                            <option selected>Country</option>
+                            <option>Select dropdown</option>
+                            <option>With options</option>
+                        </select>
+                    </div>
+                    <span class="icon is-left">
+                        <span class="material-symbols-outlined">category</span>
+                    </span>
+                </div>
+            </div>
+            <div class="control">
+                <button class="button is-primary" id="onlineSearch.searchBtn">
+                Search
+                </button>
+            </div>
+        </div>
+        <div class="grid" id="onlineFiles.searchResults">
+            <div class="card" style="width:210px;">
+                <div class="card-image">
+                    <img src="https://bulma.io/assets/images/placeholders/1280x960.png" alt="Placeholder image" />
+                </div>
+                <div class="card-content">
+                    <div class="media">
+                        <div class="media-content">
+                            <p class="title is-4">Program</p>
+                        </div>
+                    </div>
+                
+                    <div class="content">
+                        <div class="tags">
+                            <span class="tag">TI-84+ CE</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="PageContent" id="page.settings.content"></div>
+    <div class="PageContent" id="page.about.content">
+        <h1 class="title">TIApps <small class="subtitle">1.0.0</small></h1>
+        Made by Colurswitch on Cemetech<br>
+        <a href="https://www.cemetech.net/users/ColurMine" class="button">Cemetech Page</a>
+        <a href="https://github.com/Colurswitch" class="button">GitHub</a>
     </div>
 
-    <div class="modal" id="dlgNoSupport">
+    <div class="modal" id="dialog">
         <div class="modal-background"></div>
         <div class="modal-card">
             <header class="modal-card-head">
-                <p class="modal-card-title">Warning</p>
+                <h2 class="modal-card-title" id="dialog.header">Warning</h2>
             </header>
-            <section class="modal-card-body">
-                <p>
-                    The current browser has no support for WebUSB! <br>
-                    You will only be able to browse files, USB functionality <br>
-                    has been disabled.
-                </p>
+            <section class="modal-card-body" id="dialog.body">
+                Content
             </section>
             <footer class="modal-card-foot">
-                <div class="buttons">
+                <div class="buttons" id="dialog.btns">
                     <button class="button">Ok</button>
                 </div>
             </footer>
         </div>
     </div>
     <script>
-        window.addEventListener("DOMContentLoaded", function() {
-            if (!navigator.usb) {
-                document.getElementById("dlgNoSupport").style.display = "block";
-            } else {
-                // Read base64-encoded files from url parameter
-                var fileParam = new URLSearchParams(window.location.search);
-                var filesBase64 = fileParam.get("files").split(",");
-                filesBase64.forEach(file => {
-                    bota
+        HTMLElement.prototype.empty = function () { this.innerHTML = ""; }
+        Number.prototype.format = function () {
+            return Intl.NumberFormat("en-US", {
+                maximumFractionDigits: 2
+            }).format(this);
+        }
+        Number.prototype.byteFormat = function () {
+            return Intl.NumberFormat("en-US", {
+                style: "unit",
+                unit: (() => {
+                    if (this >= 1000000000) return "gigabyte";
+                    if (this >= 1000000) return "megabyte";
+                    if (this >= 1000) return "kilobyte";
+                    return "byte";
+                })()
+            }).format(Math.round(this / (() => {
+                if (this >= 1000000000) return 1000000000;
+                if (this >= 1000000) return 1000000;
+                if (this >= 1000) return 1000;
+                return 1;
+            })()));
+        }
+        Array.prototype.last = function () { return this[this.length - 1]; }
+        
+        const app = {
+            currentCalculator: null,
+            elements: {
+                dialog: "dialog",
+                dialogHeader: "dialog.header",
+                dialogBody: "dialog.body",
+                dialogBtns: "dialog.btns",
+
+                changeDevice: "changeDevice",
+                deviceInfo: "deviceInfo",
+
+                localFiles: {
+                    addFileBtn: "localFiles.addFileBtn",
+                    sendAllFiles: "localFiles.sendAllFiles",
+                    deleteAllFiles: "localFiles.deleteAllFiles",
+                    files: "localFiles.files"
+                },
+
+                onlineSearch: {
+                    query: "onlineSearch.query",
+                    deviceFilter: "onlineSearch.deviceFilter",
+                    categoryFilter: "onlineSearch.categoryFilter",
+                    searchBtn: "onlineSearch.searchBtn",
+                    searchResults: "onlineSearch.searchResults"
+                },
+            },
+            web: {
+                key: "pacspire42",
+                categories: {
+                    "z80": "TI-82+/83+/84+",
+                    "ce": "TI-83 PCE/84+ CE/82 AdvPE",
+                    "82a": "TI-82 A/84+ T",
+                    "84c": "TI-84+ CSE",
+                },
+                subcategories: {
+                    "z80": {
+                        "Action": "Action",
+                        "Aventures": "Adventures",
+                        "Cours et Formulaires": "Courses and Forms",
+                        "Jeux": "Games",
+                        "Manuels": "Manuals",
+                        "Maths": "Maths",
+                    },
+                    "ce": {
+                        "Cours et Formulaires": "Courses and Forms",
+                        "Jeux": "Games",
+                        "Jeux Levels CMonster": "Levels Games CMonster",
+                        "Jeux Levels Geometry Dash": "Levels Games Geometry Dash",
+                        "Jeux Levels Oriam": "Levels Games Oriam",
+                        "Jeux Levels Portal": "Levels Games Portal",
+                        "Manuels": "Manuals",
+                        "Maths": "Maths",
+                    },
+                    "82a": {
+                        "Cours et Formulaires": "Courses and Forms",
+                        "Jeux": "Games",
+                        "Manuels": "Manuals",
+                        "Maths": "Maths",
+                    },
+                    "84c": {
+                        "Cours et Formulaires": "Courses and Forms",
+                        "Jeux": "Games",
+                        "Jeux Levels Portal": "Levels Games Portal",
+                        "Manuels": "Manuals",
+                        "Maths": "Maths",
+                    },
+                }
+            },
+            fileTypes: {
+                "8xp": "TI-83/TI-84+ Family Program",
+                "83p": "TI-83 Program",
+                "8cp": "TI-84+ CSE Program",
+                "8sp": "TI-84+ CSE Program",
+                "8xg": "TI-84+ Family Group"
+            },
+            /** 
+             * @type {Array<{
+             *  id: string,
+             *  type: string,
+             *  file: File
+             * }>}
+            */
+            localFiles: [],
+            pages: [
+                {
+                    btn: "page.localFiles.btn",
+                    content: "page.localFiles.content"
+                },
+                {
+                    btn: "page.onlineFiles.btn",
+                    content: "page.onlineFiles.content"
+                },
+                {
+                    btn: "page.settings.btn",
+                    content: "page.settings.content"
+                },
+                {
+                    btn: "page.about.btn",
+                    content: "page.about.content"
+                }
+            ],
+            alert(message, title = "Message") {
+                return new Promise(resolve => {
+                    this.elements.dialogHeader.textContent = title;
+                    this.elements.dialogBody.innerHTML = message;
+                    this.elements.dialog.classList.add("is-active");
+                    this.elements.dialogBtns.empty();
+                    const okBtn = document.createElement("button");
+                    okBtn.classList.add("button");
+                    okBtn.textContent = "Ok";
+                    okBtn.onclick = () => {
+                        this.elements.dialog.classList.remove("is-active");
+                        this.elements.dialogBtns.empty();
+                        resolve();
+                    };
+                    this.elements.dialogBtns.appendChild(okBtn);
+                })
+            },
+            prompt(message, type, title = "Prompt", value = "", min = null, max = null) {
+                // text, textarea, number, range, or any valid HTML input value
+                return new Promise(resolve => {
+                    this.elements.dialogHeader.textContent = title;
+                    this.elements.dialogBody.innerHTML = message;
+                    let input = undefined;
+                    if (type == "textarea") {
+                        input = document.createElement("textarea");
+                        input.classList.add("textarea", "has-fixed-size");
+                        input.rows = "5";
+                        input.cols = "22";
+                        input.value = value;
+                        this.elements.dialogBody.appendChild(input);
+                    } else {
+                        input = document.createElement("input");
+                        input.type = type;
+                        input.value = value;
+                        input.min = min;
+                        input.max = max;
+                        this.elements.dialogBody.appendChild(input);
+                    }
+                    this.elements.dialog.classList.add("is-active");
+                    this.elements.dialogBtns.empty();
+                    const okBtn = document.createElement("button");
+                    okBtn.classList.add("button");
+                    okBtn.textContent = "Ok";
+                    okBtn.onclick = () => {
+                        this.elements.dialog.classList.remove("is-active");
+                        this.elements.dialogBtns.empty();
+                        resolve(input.value);
+                    };
+                    this.elements.dialogBtns.appendChild(okBtn);
+                    const cancelBtn = document.createElement("button");
+                    cancelBtn.classList.add("button");
+                    cancelBtn.textContent = "Cancel";
+                    cancelBtn.onclick = () => {
+                        this.elements.dialog.classList.remove("is-active");
+                        this.elements.dialogBtns.empty();
+                        resolve(null);
+                    };
+                    this.elements.dialogBtns.appendChild(cancelBtn);
                 });
-            }
-        })
+            },
+            /**
+             * Prompt the user to select a file with the given accept type and title.
+             * @param {string} message - The message to display to the user.
+             * @param {string} accept - The accept type of the file input.
+             * @param {string} [title="File"] - The title of the prompt.
+             * @return {Promise<File>} - A promise that resolves to the selected file or null if the user cancels.
+             */
+            promptf(message, accept, title = "File") {
+                return new Promise(resolve => {
+                    this.elements.dialogHeader.textContent = title;
+                    this.elements.dialogBody.innerHTML = message;
+                    this.elements.dialog.classList.add("is-active");
+                    this.elements.dialogBtns.empty();
+                    const cancelBtn = document.createElement("button");
+                    cancelBtn.classList.add("button");
+                    cancelBtn.textContent = "Cancel";
+                    cancelBtn.onclick = () => {
+                        this.elements.dialog.classList.remove("is-active");
+                        this.elements.dialogBtns.empty();
+                        resolve(null);
+                    };
+                    this.elements.dialogBtns.appendChild(cancelBtn);
+                    const fileInput = document.createElement("input");
+                    fileInput.type = "file";
+                    fileInput.accept = accept;
+                    fileInput.onchange = () => {
+                        this.elements.dialog.classList.remove("is-active");
+                        this.elements.dialogBtns.empty();
+                        resolve(fileInput.files[0]);
+                    };
+                    fileInput.click()
+                });
+            },
+            /**
+             * @param {string} message - The message to display to the user.
+             * @param {string} accept - The accept type of the file input.
+             * @param {string} [title="File"] - The title of the prompt.
+             * @return {Promise<File[]>} - A promise that resolves to the selected files or null, the user cancels.
+             */
+            promptfm(message, accept, title = "File") {
+                // Same as promptf, but allow the user to select multiple files.
+                return new Promise(resolve => {
+                    this.elements.dialogHeader.textContent = title;
+                    this.elements.dialogBody.innerHTML = message;
+                    this.elements.dialog.classList.add("is-active");
+                    this.elements.dialogBtns.empty();
+                    const cancelBtn = document.createElement("button");
+                    cancelBtn.classList.add("button");
+                    cancelBtn.textContent = "Cancel";
+                    cancelBtn.onclick = () => {
+                        this.elements.dialog.classList.remove("is-active");
+                        this.elements.dialogBtns.empty();
+                        resolve(null);
+                    };
+                    this.elements.dialogBtns.appendChild(cancelBtn);
+                    const fileInput = document.createElement("input");
+                    fileInput.type = "file";
+                    fileInput.accept = accept;
+                    fileInput.multiple = true;
+                    fileInput.onchange = () => {
+                        this.elements.dialog.classList.remove("is-active");
+                        this.elements.dialogBtns.empty();
+                        resolve(fileInput.files);
+                    };
+                    fileInput.click()
+                });
+            },
+            confirm(message, title = "Message") {
+                return new Promise(resolve => {
+                    this.elements.dialogHeader.textContent = title;
+                    this.elements.dialogBody.innerHTML = message;
+                    this.elements.dialog.classList.add("is-active");
+                    this.elements.dialogBtns.empty();
+                    const yesBtn = document.createElement("button");
+                    yesBtn.classList.add("button", "is-success");
+                    yesBtn.textContent = "Yes";
+                    yesBtn.onclick = () => {
+                        this.elements.dialog.classList.remove("is-active");
+                        this.elements.dialogBtns.empty();
+                        resolve(true);
+                    };
+                    this.elements.dialogBtns.appendChild(yesBtn);
+                    const noBtn = document.createElement("button");
+                    noBtn.classList.add("button", "is-danger");
+                    noBtn.textContent = "No";
+                    noBtn.onclick = () => {
+                        this.elements.dialog.classList.remove("is-active");
+                        this.elements.dialogBtns.empty();
+                        resolve(false);
+                    };
+                    this.elements.dialogBtns.appendChild(noBtn);
+                })
+            },
+            message(message, title = "Message") {
+                // Display a message without buttons.
+                this.elements.dialogHeader.textContent = title;
+                this.elements.dialogBody.innerHTML = message;
+                this.elements.dialog.classList.add("is-active");
+                this.elements.dialogBtns.empty();
+            },
+            hmessage() {
+                // Hides a message that was displayed with message().
+                this.elements.dialog.classList.remove("is-active");
+            },
+            osearch(query, category, devices) {
+                //this.elements.onlineSearch.query.value = query;
+                //this.elements.onlineSearch.deviceFilter.value = category;
+                //this.elements.onlineSearch.categoryFilter.value = devices;
+                const url = `https://tiplanet.org/api.php?key=${this.web.key}&req=search&name=${query}`+
+                    (`&platform=${devices}`)+
+                    (`&categories=${category}`);
+                console.log(url)
+                fetch(url, {
+                    mode: "no-cors"
+                }).then(res => res.json()).then(json => {
+                    console.log(json)
+                })
+            },
+            refreshLocalFiles() {
+                this.elements.localFiles.files.innerHTML = this.localFiles.map(file => `<tr>
+                    <td>${file.file.name}</td>
+                    <td>${file.file.size.byteFormat()}</td>
+                    <td>${file.type}</td>
+                    <td>
+                        <button class="button is-primary" onclick="app.sendLocalFile('${file.id}')">Send</button>
+                        <button class="button is-danger" onclick="app.deleteLocalFile('${file.id}')">Delete</button>
+                    </td>
+                </tr>`).join("")
+            },
+            addLocalFile() {
+                this.promptfm("Select a valid calculator file.", ".8*p, .8*g").then(files => {
+                    if (!files || files.length === 0) return;
+                    console.log(files)
+                    for (const file of files) {
+                        if (
+                            (/([.]8.p|[.]8.g)/gm).test(file.name) /*&& 
+                            this.currentCalculator && 
+                            this.currentCalculator.canReceive(file) &&
+                            this.currentCalculator.getStorageDetails(file)*/
+                        ) {
+                            this.localFiles.push({
+                                id: crypto.randomUUID(),
+                                type: this.fileTypes[file.name.split(".").last()],
+                                file: file
+                            });
+                            this.refreshLocalFiles();
+                        } else {
+                            this.alert("The file you selected is invalid.")
+                        }
+                    }
+                })
+            },
+            deleteLocalFile(id) {
+                this.localFiles = this.localFiles.filter(file => file.id !== id);
+                this.refreshLocalFiles();
+            },
+            /**
+             * Send a local file to the calculator.
+             * @param {string} id - The id of the file to send.
+             */
+            sendLocalFile(id) {
+                const file = this.localFiles.find(f => f.id === id);
+                if (file && this.currentCalculator && this.currentCalculator.canReceive(file.file)) {
+                    this.confirm(`Are you sure you want to send ${file.file.name} to your "${this.currentCalculator.name}"?`).then(res => {
+                        if (res) {
+                            file.file.arrayBuffer().then(buffer => {
+                                this.currentCalculator.send(tifiles.parseFile(new Uint8Array(buffer)));
+                            })
+                            
+                        }
+                    })
+                } else {
+                    this.alert("The file you selected could not be found, or your calculator doesn't support this file.")
+                }
+            },
+            deleteAllLocalFiles() {     
+                this.confirm("Are you sure you want to delete all local files?").then(ans => {
+                    if (ans) {
+                        this.localFiles = []
+                        this.refreshLocalFiles();   
+                    }
+                })
+            },
+            sendAllLocalFiles() {
+                if (this.currentCalculator && this.localFiles && this.localFiles.length > 0) {
+                    this.confirm(`Are you sure you want to send all ${this.localFiles.length} files to your "${this.currentCalculator.name}"?`).then(res => {
+                        if (res) for (const file of this.localFiles) {
+                            if (tifiles.isValid(file.file) && this.currentCalculator.canReceive(file.file)) {
+
+                            } else {
+                                console.log(`Skipped file "${file.file.name}" because it is unsupported`)
+                            }
+                        }
+                    })
+                }
+            },
+            chooseDevice() {
+                this.message("Select a valid USB device");
+                try {
+                    ticalc.addEventListener("connect", c => {
+                        this.message("Connecting to device...");
+                        if (c) c.isReady().then(res => {
+                            if (res) {
+                                this.hmessage()
+                                this.currentCalculator = c;
+                                if (c.status !== "supported") this.alert("Your device is experimental or still in beta testing. Please use with caution.")
+                                this.elements.changeDevice.innerHTML = `<a class="icon-text">
+                                    <span class="material-symbols-outlined">
+                                        device_hub
+                                    </span>
+                                    <span id="currentDevice">${c.name}</span>
+                                </a>`;
+                                this.elements.deviceInfo.innerHTML = `<div class="message-header">
+                                    <p>${c.name}</p>
+                                </div>
+                                <div class="message-body">
+                                    <b>Storage</b><br>
+                                    RAM free: please wait
+                                    ARC free: please wait
+                                    <b>Matcher</b><br>
+                                    <code class="code">vendorId</code>: <code>${c.matcher.vendorId}</code><br>
+                                    <code class="code">productId</code>: <code>${c.matcher.productId}</code><br>
+                                    <code class="code">serialNumber</code>: <code>${c.serialNumber}</code><br>
+                                    <b>Status</b><br>
+                                    ${c.status}
+                                </div>`;
+                                c.getFreeMem().then(mem => {
+                                    this.elements.deviceInfo.innerHTML = `<div class="message-header">
+                                        <p>${c.name}</p>
+                                    </div>
+                                    <div class="message-body">
+                                        <b>Storage</b><br>
+                                        RAM free: ${mem.ram}<br>
+                                        ARC free: ${mem.flash}<br>
+                                        <b>Matcher</b><br>
+                                        <code class="code">vendorId</code>: <code>${c.matcher.vendorId}</code><br>
+                                        <code class="code">productId</code>: <code>${c.matcher.productId}</code><br>
+                                        <code class="code">serialNumber</code>: <code>${c.serialNumber}</code><br>
+                                        <b>Status</b><br>
+                                        ${c.status}
+                                    </div>`;
+                                })
+                            }
+                        }).catch(e => {
+                            this.alert("Error connecting to device: " + e);
+                        })
+                    })
+                    ticalc.choose().then(() => {
+                        this.refreshLocalFiles();
+                    }).catch(e => {
+                        this.alert("Error choosing device: " + e);
+                    })
+                } catch (e) {
+                    this.alert("Error choosing device: " + e);
+                }
+            },
+            init() {
+                this.elements.dialog = document.getElementById(this.elements.dialog);
+                this.elements.dialogHeader = document.getElementById(this.elements.dialogHeader);
+                this.elements.dialogBody = document.getElementById(this.elements.dialogBody);
+                this.elements.dialogBtns = document.getElementById(this.elements.dialogBtns);
+
+                this.elements.changeDevice = document.getElementById(this.elements.changeDevice);
+                this.elements.deviceInfo = document.getElementById(this.elements.deviceInfo)
+
+                this.elements.localFiles.addFileBtn = document.getElementById(this.elements.localFiles.addFileBtn);
+                this.elements.localFiles.sendAllFiles = document.getElementById(this.elements.localFiles.sendAllFiles);
+                this.elements.localFiles.deleteAllFiles = document.getElementById(this.elements.localFiles.deleteAllFiles);
+                this.elements.localFiles.files = document.getElementById(this.elements.localFiles.files);
+
+                this.elements.onlineSearch.query = document.getElementById(this.elements.onlineSearch.query);
+                this.elements.onlineSearch.deviceFilter = document.getElementById(this.elements.onlineSearch.deviceFilter);
+                this.elements.onlineSearch.categoryFilter = document.getElementById(this.elements.onlineSearch.categoryFilter);
+                this.elements.onlineSearch.searchBtn = document.getElementById(this.elements.onlineSearch.searchBtn);
+                this.elements.onlineSearch.searchResults = document.getElementById(this.elements.onlineSearch.searchResults);
+
+                // Check for a mobile device
+                if (/android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(navigator.userAgent)) {
+                    this.message("This app is not supported on mobile devices.");
+                    return;
+                } else if (navigator.userAgent.indexOf("MSIE") !== -1 || navigator.userAgent.indexOf("Trident/") !== -1) {
+                    this.message("Your browser is too old to use this app. <br>Please use a newer browser.");
+                    return;
+                } else if (!ticalc.browserSupported()) {
+                    this.message("Your browser has no support for WebUSB. <br>Please use a different browser.");
+                    return;
+                }
+
+                ticalc.init({ supportLevel: "beta" })
+
+                for (const page of this.pages) {
+                    page.btn = document.getElementById(page.btn);
+                    page.content = document.getElementById(page.content);
+                    page.btn.onclick = () => {
+                        for (const el of document.getElementsByClassName("PageTab")) {
+                            el.classList.remove("is-active")
+                        }
+                        page.btn.classList.add("is-active")
+                        for (const el of document.getElementsByClassName("PageContent")) {
+                            el.style.display = "none";
+                        }
+                        page.content.style.display = "block";
+                    }
+                }
+                this.pages[0].btn.click(); // Show the first page by default
+
+                this.elements.changeDevice.onclick = () => this.chooseDevice()
+
+                this.refreshLocalFiles()
+                this.elements.localFiles.addFileBtn.onclick = () => this.addLocalFile()
+                this.elements.localFiles.deleteAllFiles.onclick = () => this.deleteAllLocalFiles()
+                this.elements.localFiles.sendAllFiles.onclick = () => this.sendAllLocalFiles()
+
+                this.elements.onlineSearch.deviceFilter.empty()
+                this.elements.onlineSearch.deviceFilter.add(new Option("All", ""))
+                this.elements.onlineSearch.deviceFilter.onchange = () => {
+                    this.elements.onlineSearch.categoryFilter.empty()
+                    this.elements.onlineSearch.categoryFilter.add(new Option("All", ""))
+                    for (const subcategory in this.web.subcategories[this.elements.onlineSearch.deviceFilter.value]) 
+                        this.elements.onlineSearch.categoryFilter.add(new Option(this.web.subcategories[this.elements.onlineSearch.deviceFilter.value][subcategory], subcategory))
+                }
+                for (const device in this.web.categories)
+                    this.elements.onlineSearch.deviceFilter.add(new Option(this.web.categories[device], device))
+                this.elements.onlineSearch.deviceFilter.onchange()
+                this.elements.onlineSearch.searchBtn.onclick = () => this.osearch(
+                    this.elements.onlineSearch.query.value,
+                    this.elements.onlineSearch.categoryFilter.value,
+                    this.elements.onlineSearch.deviceFilter.value,
+                )
+
+                document.getElementById("loader").style.display = "none";
+            },
+        }
+        window.onload = () => app.init()
     </script>
 </body>
 
